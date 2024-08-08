@@ -1,39 +1,12 @@
 package com.springboot.RestWebService.restcontroller;
 
-import com.springboot.RestWebService.entity.Student;
-import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
-@RestController
-@RequestMapping("/api")
-public class StudentRestController {
-
-    private List<Student> theStudents=new ArrayList<>();
-    @PostConstruct
-    public void loadData(){
-        theStudents.add(new Student("Siva","Kumar"));
-        theStudents.add(new Student("Nivas","T"));
-    }
-
-    @GetMapping("/students")
-    public List<Student> getStudents(){
-
-        return theStudents;
-    }
-    @GetMapping("/students/{studentId}")
-    public Student getSpecificStudent(@PathVariable int studentId){
-
-        if(studentId>=theStudents.size() || studentId<0)
-            throw new StudentNotFoundException("Student Id not found "+ studentId);
-        return theStudents.get(studentId);
-    }
-
+@ControllerAdvice
+public class StudentRestExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exec)
     {
